@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Symptom to Disease Predictor</title>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            border: 2px solid black;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            width: 100%;
+        }
+        .results {
+            border: 1px solid black;
+            min-width: 500px
+            height: 45px;
+            padding: 2px;
+            margin: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .suggestions div {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+        h1 {
+          position: relative;
+          padding: 0;
+          margin: 0;
+          font-family: "Raleway", sans-serif;
+          font-weight: 300;
+          font-size: 40px;
+          color: #080808;
+          -webkit-transition: all 0.4s ease 0s;
+          -o-transition: all 0.4s ease 0s;
+          transition: all 0.4s ease 0s;
+        }
+
+        h1 span {
+          display: block;
+          font-size: 0.5em;
+          line-height: 1.3;
+        }
+        h1 em {
+          font-style: normal;
+          font-weight: 600;
+        }
+
+        /* === HEADING STYLE #1 === */
+        .one h1 {
+          text-align: center;
+          text-transform: uppercase;
+          padding-bottom: 5px;
+        }
+        .one h1:before {
+          width: 28px;
+          height: 5px;
+          display: block;
+          content: "";
+          position: absolute;
+          bottom: 3px;
+          left: 50%;
+          margin-left: -14px;
+          background-color: #b80000;
+        }
+        .one h1:after {
+          width: 100px;
+          height: 1px;
+          display: block;
+          content: "";
+          position: relative;
+          margin-top: 25px;
+          left: 50%;
+          margin-left: -50px;
+          background-color: #b80000;
+        }
+
+    </style>
+    <script>
+        function searchSymptoms(inputId, suggestionsId) {
+            const query = document.getElementById(inputId).value;
+            fetch('/search_symptoms?query=' + query)
+            .then(response => response.json())
+            .then(data => {
+                let suggestions = document.getElementById(suggestionsId);
+                suggestions.innerHTML = '';
+                data.forEach(symptom => {
+                    let option = document.createElement('div');
+                    option.textContent = symptom;
+                    option.onclick = () => {
+                        document.getElementById(inputId).value = symptom;
+                        suggestions.innerHTML = '';
+                    };
+                    suggestions.appendChild(option);
+                });
+            });
+        }
+
+        function fetchAllSymptoms(inputId, suggestionsId) {
+            fetch('/search_symptoms?query=')
+            .then(response => response.json())
+            .then(data => {
+                let suggestions = document.getElementById(suggestionsId);
+                suggestions.innerHTML = '';
+                data.forEach(symptom => {
+                    let option = document.createElement('div');
+                    option.textContent = symptom;
+                    option.onclick = () => {
+                        document.getElementById(inputId).value = symptom;
+                        suggestions.innerHTML = '';
+                    };
+                    suggestions.appendChild(option);
+                });
+            });
+        }
+
+        function predictDisease() {
+            const symptom1 = document.getElementById('symptom-input-1').value;
+            const symptom2 = document.getElementById('symptom-input-2').value;
+            const symptom3 = document.getElementById('symptom-input-3').value;
+            const days = document.getElementById('days-input').value;
+
+            if (!symptom1 && !symptom2 && !symptom3) {
+                document.getElementById('results').textContent = 'Please enter at least one symptom.';
+                return;
+            }
+
+            if (!days || days <= 0) {
+                document.getElementById('results').textContent = 'Please enter a valid number of days.';
+                return;
+            }
+
+            const symptoms = [symptom1, symptom2, symptom3].filter(Boolean).join(',');
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symptoms: symptoms, days: days })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('results').textContent = 'You may have: ' + data.disease;
+                document.getElementById('results').style.color = 'black'; // Reset color to black for valid results
+            });
+        }
+
+        function handleKeyDown(event, inputId, suggestionsId) {
+            if (event.keyCode === 40) { // Down arrow key
+                let suggestions = document.getElementById(suggestionsId);
+                if (suggestions && suggestions.firstChild) {
+                    suggestions.firstChild.focus();
+                }
+            }
+        }
+    </script>
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="one"><h1>Symptom to Disease Predictor</h1></div>
+        <input type="text" id="symptom-input-1" placeholder="Enter symptom 1" onfocus="fetchAllSymptoms('symptom-input-1', 'suggestions-1')" onkeyup="searchSymptoms('symptom-input-1', 'suggestions-1')" onkeydown="handleKeyDown(event, 'symptom-input-1', 'suggestions-1')">
+        <div id="suggestions-1" class="suggestions" tabindex="-1"></div>
+        <input type="text" id="symptom-input-2" placeholder="Enter symptom 2" onfocus="fetchAllSymptoms('symptom-input-2', 'suggestions-2')" onkeyup="searchSymptoms('symptom-input-2', 'suggestions-2')" onkeydown="handleKeyDown(event, 'symptom-input-2', 'suggestions-2')">
+        <div id="suggestions-2" class="suggestions" tabindex="-1"></div>
+        <input type="text" id="symptom-input-3" placeholder="Enter symptom 3" onfocus="fetchAllSymptoms('symptom-input-3', 'suggestions-3')" onkeyup="searchSymptoms('symptom-input-3', 'suggestions-3')" onkeydown="handleKeyDown(event, 'symptom-input-3', 'suggestions-3')">
+        <div id="suggestions-3" class="suggestions" tabindex="-1"></div>
+        <input type="number" id="days-input" placeholder="Number of days" min="1">
+        <button onclick="predictDisease()">Predict Disease</button>
+        <div class="results" id="results">You may have: </div>
+    </div>
+</body>
+</html>
+
