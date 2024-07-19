@@ -13,7 +13,7 @@ This repository contains a Symptom-to-Disease Prediction Model designed to predi
 
 ├── templates/
 
-│ └── index.html # HTML file for the web interface
+  └── index.html # HTML file for the web interface
 
 └── README.md # Project README file
 
@@ -26,20 +26,23 @@ This repository contains a Symptom-to-Disease Prediction Model designed to predi
 
 1. Clone the repository:
    git clone https://github.com/pillaiash/Symptom-to-Disease-Prediction-Model.git
+   
    cd symptom-to-disease-prediction
 
 2. Create and activate a virtual environment:
    python -m venv env
+   
 # On Windows
 .\env\Scripts\activate
+
 # On macOS and Linux
 source env/bin/activate
 
 3. Install the required dependencies:
    pip install -r requirements.txt
 
-# Usage
-python main.py
+# Usage (Run)
+python app.py
 
 # Access the web interface:
 Open your web browser and navigate to http://127.0.0.1:5000.
