@@ -3,12 +3,17 @@
 This repository contains a Symptom-to-Disease Prediction Model designed to predict medical conditions based on user-reported symptoms. The project includes Python scripts for training and deploying the model, as well as an HTML file for the web-based user interface.
 
 ## Project Structure
-├── main.py # Main script for running the application
-├── version_2.py # Additional script with extended functionality
-├── best_model.pkl # Trained model in pickle format
-├── symptoms_columns.pkl # Pickle file with the list of symptoms columns
+├── main.py # Main script for running the application.
+
+├── version_2.py # Additional script with extended functionality.
+
+├── best_model.pkl # Trained model in pickle format.
+
+├── symptoms_columns.pkl # Pickle file with the list of symptoms columns.
+
 ├── templates/
 │ └── index.html # HTML file for the web interface
+
 └── README.md # Project README file
 
 ## Features
