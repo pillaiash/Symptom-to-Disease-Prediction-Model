@@ -12,6 +12,7 @@ This repository contains a Symptom-to-Disease Prediction Model designed to predi
 ├── symptoms_columns.pkl # Pickle file with the list of symptoms columns.
 
 ├── templates/
+
 │ └── index.html # HTML file for the web interface
 
 └── README.md # Project README file
@@ -24,7 +25,7 @@ This repository contains a Symptom-to-Disease Prediction Model designed to predi
 ## Installation
 
 1. Clone the repository:
-   git clone https://github.com/pillaiaish/symptom-to-disease-prediction.git
+   git clone https://github.com/pillaiash/Symptom-to-Disease-Prediction-Model.git
    cd symptom-to-disease-prediction
 
 2. Create and activate a virtual environment:
